@@ -1,0 +1,40 @@
+TDD RED 证据 · DAY2-C · publish 发布通道层
+时间: 2026-08-18
+运行: cd /d/llm/marketing-agent/marketing-agent && PYTHONIOENCODING=utf-8 python -m pytest publish/tests/ -v
+结果: 1 failed, 29 passed（RED → 修实现 → 全绿）
+
+失败用例（首次 RED，真实失败非人为制造）:
+
+publish/tests/test_human_gate.py::TestHumanGatePreview::test_preview_contains_platform_and_title FAILED
+    """预览文本包含平台、标题、标签信息"""
+    gate = HumanGate()
+    summary = {
+        "platform": "xiaohongshu",
+        "title": "测试标题",
+        "body_summary": "这是正文摘要...",
+        "tags": ["教育", "学习"],
+        "image_count": 3,
+        "schedule_time": None,
+        "location": "北京",
+    }
+    preview = gate.generate_preview("xiaohongshu", summary)
+    self.assertIn("xiaohongshu", preview)
+    self.assertIn("测试标题", preview)
+    self.assertIn("教育", preview)
+    self.assertIn("学习", preview)
+    self.assertIn("图片数量: 3", preview)
+>   self.assertIn("立即", preview)
+E   AssertionError: '立即' not found in '=== 发布预览 ===\n平台: xiaohongshu\n标题: 测试标题\n正文摘要: 这是正文摘要...\n标签: 教育, 学习\n图片数量: 3\n定时发布: None\n地点: 北京'
+    ↓
+    [100%]
+    =================== 1 failed, 34 passed in 7.22s ===================
+    （注：34 passed 含 Lane D 的 test_storage 6 条，我车道 29 条中 1 failed）
+
+修复:
+    publish/human_gate.py 的 generate_preview()
+    - 原: lines.append(f"定时发布: {post_summary.get('schedule_time', '立即')}")
+    - 改: schedule = post_summary.get("schedule_time")
+           lines.append(f"定时发布: {schedule if schedule else '立即'}")
+    → None/空字符串都显示「立即」，不再显示字面 "None"
+
+修复后全绿: 30 passed（仅本车道，见 GREEN 证据）
