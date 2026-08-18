@@ -1,0 +1,15 @@
+DAY2-D TDD RED evidence
+
+1) Storage RED
+Command: cd /d/llm/marketing-agent/marketing-agent && python -m pytest publish/tests/test_storage.py -v
+Result: exit=2; collection failed with ModuleNotFoundError: No module named 'publish.human_gate' before storage.py existed.
+
+2) Rate-limit RED
+Command: cd /d/llm/marketing-agent/marketing-agent && python -m pytest publish/tests/test_rate_limit.py -v
+Result: exit=2; collection failed with ModuleNotFoundError: No module named 'publish.rate_limit' before rate_limit.py existed.
+
+3) CLI RED
+Command: cd /d/llm/marketing-agent/marketing-agent && python -m pytest publish/tests/test_run.py -v
+Result: exit=2; collection failed with ModuleNotFoundError: No module named 'publish.run' before run.py existed.
+
+These are genuine RED collection failures caused by the three missing implementation modules; each suite was rerun after implementation and passed.
