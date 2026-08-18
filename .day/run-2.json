@@ -1,0 +1,118 @@
+{
+  "day": 2,
+  "project": "marketing-agent",
+  "designer": "0813",
+  "created_at": "2026-08-18T17:00:00+08:00",
+  "repo_root": "D:/llm/marketing-agent",
+  "code_dir": "marketing-agent",
+  "current_head": "0aa072b",
+  "scope": "P2(browser⑥) + P3(publish④)",
+  "rounds": 2,
+  "lanes": [
+    {
+      "id": "A",
+      "model": "exec-strong",
+      "building_block": "⑤ browser",
+      "task": "engine.py 引擎抽象 + humanize.py 真人行为",
+      "round": 1,
+      "depends_on": [],
+      "packet": "docs/evidence/DAY2-A-PACKET.md",
+      "files": [
+        "marketing-agent/browser/__init__.py",
+        "marketing-agent/browser/engine.py",
+        "marketing-agent/browser/humanize.py",
+        "marketing-agent/browser/tests/__init__.py",
+        "marketing-agent/browser/tests/test_engine.py",
+        "marketing-agent/browser/tests/test_humanize.py"
+      ]
+    },
+    {
+      "id": "B",
+      "model": "exec-luna",
+      "building_block": "⑤ browser",
+      "task": "cookie_store.py + account_manager.py + requirements.txt",
+      "round": 1,
+      "depends_on": [],
+      "packet": "docs/evidence/DAY2-B-PACKET.md",
+      "files": [
+        "marketing-agent/browser/cookie_store.py",
+        "marketing-agent/browser/account_manager.py",
+        "marketing-agent/browser/tests/test_cookie_store.py",
+        "marketing-agent/browser/tests/test_account_manager.py",
+        "marketing-agent/requirements.txt"
+      ]
+    },
+    {
+      "id": "C",
+      "model": "exec-strong",
+      "building_block": "④ publish",
+      "task": "publish/ 小红书+抖音表单 + human_gate.py 人工确认闸",
+      "round": 2,
+      "depends_on": ["A", "B"],
+      "packet": "docs/evidence/DAY2-C-PACKET.md",
+      "files": [
+        "marketing-agent/publish/__init__.py",
+        "marketing-agent/publish/platforms/__init__.py",
+        "marketing-agent/publish/platforms/xiaohongshu.py",
+        "marketing-agent/publish/platforms/douyin.py",
+        "marketing-agent/publish/human_gate.py",
+        "marketing-agent/publish/tests/__init__.py",
+        "marketing-agent/publish/tests/test_xiaohongshu.py",
+        "marketing-agent/publish/tests/test_douyin.py",
+        "marketing-agent/publish/tests/test_human_gate.py"
+      ]
+    },
+    {
+      "id": "D",
+      "model": "exec-luna",
+      "building_block": "④ publish",
+      "task": "rate_limit.py + storage.py + run.py CLI入口",
+      "round": 2,
+      "depends_on": ["A", "B"],
+      "packet": "docs/evidence/DAY2-D-PACKET.md",
+      "files": [
+        "marketing-agent/publish/storage.py",
+        "marketing-agent/publish/rate_limit.py",
+        "marketing-agent/publish/run.py",
+        "marketing-agent/publish/tests/test_rate_limit.py",
+        "marketing-agent/publish/tests/test_storage.py"
+      ]
+    }
+  ],
+  "round_plan": {
+    "round_1": {
+      "lanes": ["A", "B"],
+      "action": "并行无依赖",
+      "post_action": "git push origin master, 确认 browser/engine.py 接口契约落地"
+    },
+    "round_2": {
+      "lanes": ["C", "D"],
+      "prerequisite": "pull origin/master, 确认 browser/engine.py / browser/cookie_store.py / browser/account_manager.py 存在",
+      "action": "并行，消费 browser 接口完成 publish 发布层"
+    }
+  },
+  "redlines": [
+    "M001/M-L002: 路径用仓库根相对路径，BASE_DIR=Path(__file__).resolve().parent",
+    "M002/M-L001: commit 前 git rev-parse --show-toplevel 确认根",
+    "M003/M-L005: 改 .gitignore 后逐行 cat + git check-ignore 验证",
+    "M005/M-L003: CLI UTF-8 stdout，测试 PYTHONIOENCODING=utf-8",
+    "M004/M-L004: 预览/中间产物不送质量合规门，真稿才审",
+    "纯API签名发布禁用，每天≤1篇/账号，间隔24h+",
+    "引擎可热替换：invisible_playwright优先，备patchright",
+    "全部测试用UnittestEngine离线跑，不依赖真实浏览器"
+  ],
+  "acceptance": {
+    "min_tests": {
+      "A": 12,
+      "B": 16,
+      "C": 15,
+      "D": 12
+    },
+    "total_min": 55,
+    "existing_tests": 63,
+    "expected_total": 118,
+    "pytest_cmd": "python -m pytest browser/tests/ publish/tests/ -v",
+    "docs_dir": "docs/evidence",
+    "packet_format": "四节（完成概况/测试结果/文件清单/自查证据），第4节非空"
+  }
+}
