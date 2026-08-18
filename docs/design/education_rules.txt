@@ -1,0 +1,117 @@
+{
+ "id": "industry-education",
+ "name": "教育培训",
+ "law": "《广告法》第二十四条",
+ "severity": "block",
+ "description": "教育培训广告不得承诺通过考试、不得暗示与命题人有关联",
+ "triggers": [
+  "培训",
+  "课程",
+  "教育",
+  "考研",
+  "考公",
+  "考证",
+  "留学",
+  "语培",
+  "职业培训",
+  "学历",
+  "辅导"
+ ],
+ "patterns": [
+  {
+   "type": "keyword",
+   "value": "包过",
+   "suggestion": "教育培训不得承诺通过"
+  },
+  {
+   "type": "keyword",
+   "value": "保过",
+   "suggestion": "教育培训不得承诺通过"
+  },
+  {
+   "type": "keyword",
+   "value": "不过退款",
+   "suggestion": "需确认退款条款真实性"
+  },
+  {
+   "type": "keyword",
+   "value": "一次性通过",
+   "suggestion": "不得承诺考试结果"
+  },
+  {
+   "type": "keyword",
+   "value": "必过",
+   "suggestion": "不得承诺考试结果"
+  },
+  {
+   "type": "keyword",
+   "value": "保证上岸",
+   "suggestion": "不得承诺考试结果"
+  },
+  {
+   "type": "keyword",
+   "value": "协议班",
+   "suggestion": "需明确协议条款"
+  },
+  {
+   "type": "keyword",
+   "value": "命题人",
+   "suggestion": "不得暗示与考试命题人有关联"
+  },
+  {
+   "type": "keyword",
+   "value": "内部名额",
+   "suggestion": "不得虚构招生名额"
+  },
+  {
+   "type": "keyword",
+   "value": "保送",
+   "suggestion": "不得承诺保送结果"
+  },
+  {
+   "type": "keyword",
+   "value": "包上岸",
+   "suggestion": "不得承诺考试结果"
+  },
+  {
+   "type": "keyword",
+   "value": "百分百通过",
+   "suggestion": "不得承诺考试结果"
+  },
+  {
+   "type": "keyword",
+   "value": "内部题库",
+   "suggestion": "不得暗示与命题人有关联"
+  },
+  {
+   "type": "keyword",
+   "value": "押题命中",
+   "suggestion": "不得暗示与命题人有关联"
+  },
+  {
+   "type": "keyword",
+   "value": "原题泄露",
+   "suggestion": "删除，涉嫌违法"
+  },
+  {
+   "type": "keyword",
+   "value": "名额有限",
+   "suggestion": "需确保名额限制真实"
+  },
+  {
+   "type": "keyword",
+   "value": "最后一期",
+   "suggestion": "虚假紧迫感引导，建议删除"
+  },
+  {
+   "type": "keyword",
+   "value": "保送名校",
+   "suggestion": "不得承诺保送结果"
+  },
+  {
+   "type": "keyword",
+   "value": "清北名师",
+   "suggestion": "需确认教师资质真实"
+  }
+ ]
+}
