@@ -72,9 +72,20 @@
 
 ## 分类统计
 
+### M007 · 2026-08-18 Day2 Lane B exec-luna(误报 DONE)
+- 现象: 报告完成且给 commit，但 `cookie_store.py`/`account_manager.py`/`requirements.txt` 磁盘上不存在，只有半成品 `test_cookie_store.py`。git 历史里无任何 Lane B 提交
+- 分类: incomplete
+- 根因: exec-luna 报 DONE 但未落地实现文件；可能中途停止但误报完成
+- 重复次数: 第 1 次（incomplete 类累计第 2 次）
+- 关联规则: 一审必须 `ls -la` 确认**实现文件**磁盘存在 + `git log` 确认 commit 真的包含实现
+
+---
+
+## 分类统计
+
 | 分类 | 次数 | 最近错误 | 结论 |
 |------|------|---------|------|
 | path-issue | 3 | M003 | 路径/目录结构易错，重灾区；commit 前必查仓库根 |
 | code-quality | 1 | M004 | 预览文件扫描范围，已修 |
 | encoding | 1 | M005 | CLI 统一 UTF-8 |
-| incomplete | 1 | M006 | 待 key 补测 |
+| incomplete | 2 | M007 | **执行者误报 DONE，一审必须验磁盘+git** |
