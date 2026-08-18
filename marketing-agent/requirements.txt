@@ -1,0 +1,6 @@
+# Marketing Agent 项目依赖
+# 每行一个包，不指定版本号（当前环境无版控，由 pip 自动解析）
+
+requests
+pytest
+playwright
