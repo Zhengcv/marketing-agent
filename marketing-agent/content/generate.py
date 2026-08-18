@@ -176,7 +176,7 @@ def load_violation_words() -> Tuple[str, ...]:
         return _violation_word_cache
 
     words: List[str] = list(_VIOLATION_BASE)
-    rules_path = BASE_DIR.parent.parent / "docs" / "marketing" / "design" / "rules.json"
+    rules_path = BASE_DIR.parent.parent / "docs" / "design" / "rules.json"
     try:
         if not rules_path.is_file():
             raise FileNotFoundError(str(rules_path))  # 走到 except 打印一条 warn

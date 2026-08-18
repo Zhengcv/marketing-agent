@@ -46,7 +46,15 @@ def prepare_publication_text(text: str) -> str:
 
     普通纯文本不会被改变；带有参考文档章节的 Markdown 则只取“正文”章节，
     避免把合规自查勾选项、拍摄清单或发布时间当成文案质量信号。
+
+    ``--no-call`` 预览文件（generate.py 生成的 prompt 预览）会被完整识别并返回空串：
+    它包含模板铁律（角色设定/反AI化/合规红线/输出格式），这些是给 LLM 的指令，
+    其中"禁词清单"（如「禁'最/第一/提分/保过'」）本身带违禁词示例，
+    若按正文扫描会产生假阳性。预览文件应通过 ``--no-call`` 生成真稿后再审核。
     """
+    # --no-call 预览标记识别：YAML frontmatter mode: no-call
+    if "mode: no-call" in text or "mode: \"no-call\"" in text:
+        return ""
     markers = ("## 🔍 合规自查", "## 📱 评论区自留")
     body = text.split("## 📝 正文", 1)[-1]
     for marker in markers:

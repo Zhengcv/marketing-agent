@@ -68,8 +68,39 @@ class Verdict:
         }
 
 
+def _prepare_publication_text(text: str) -> str:
+    """从 markdown 文件中提取真实发布正文，跳过 frontmatter 和 prompt 模板。
+
+    ``--no-call`` 预览文件（mode: no-call）包含给 LLM 的完整指令，
+    其中的"禁词清单"示例（如「禁'最/第一/提分/保过'」）会触发假阳性，
+    因此遇到预览文件返回空字符串。
+    """
+    # --no-call 预览标记
+    if "mode: no-call" in text or 'mode: "no-call"' in text:
+        return ""
+    # 有 frontmatter 时去掉它
+    body = text
+    if body.lstrip().startswith("---"):
+        # 找到第二个 ---
+        parts = body.split("---", 2)
+        if len(parts) >= 3:
+            body = parts[2]
+    # 有 ## 📝 正文标记时提取正文（质量门同款格式）
+    if "## 📝 正文" in body:
+        body = body.split("## 📝 正文", 1)[-1]
+    # 去掉发布信息/合规自查等尾部章节
+    for marker in ("## 🔍 合规自查", "## 📱 评论区自留", "## 📋 发布信息",
+                   "## 📷 拍摄清单", "## ⏰ 定时发布"):
+        body = body.split(marker, 1)[0]
+    return body.strip()
+
+
 def check_text(text: str, rules=None) -> Verdict:
-    """对文案执行 L1→L2→L3 三级审核，返回 :class:`Verdict`。"""
+    """对文案执行 L1→L2→L3 三级审核，返回 :class:`Verdict`。
+
+    ``text`` 应为已提取的发布正文（不含 frontmatter / prompt 模板）。
+    从文件扫描时，调用方应先用 ``_prepare_publication_text`` 提取。
+    """
     if rules is None:
         rules = load_rules()
 
@@ -160,7 +191,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(f"文件不存在: {args.file}", file=sys.stderr)
             return 2
         with open(args.file, "r", encoding="utf-8") as fp:
-            text = fp.read()
+            text = _prepare_publication_text(fp.read())
+        if not text:
+            print("[info] 合规闸: 文件为 --no-call 预览模式（含 prompt 模板），跳过自动审核，请在真稿生成后重跑。")
+            return 0
     elif args.text is not None:
         text = args.text
     else:

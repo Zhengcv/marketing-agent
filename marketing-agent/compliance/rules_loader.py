@@ -50,11 +50,11 @@ class PatternRule(TypedDict):
 
 
 # 默认规则文件路径（相对仓库根）。
-# 解析为：本文件向上四级回到仓库根，再下探到 docs/marketing/design/rules.json。
+# 解析为：本文件向上四级回到仓库根，再下探到 docs/design/rules.json。
 _DEFAULT_RULES_PATH = os.path.normpath(
     os.path.join(
         os.path.dirname(__file__),
-        "..", "..", "docs", "marketing", "design", "rules.json",
+        "..", "..", "docs", "design", "rules.json",
     )
 )
 
