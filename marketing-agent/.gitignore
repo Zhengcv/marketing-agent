@@ -1,4 +1,5 @@
 # 测试副产物
 test_out.md
 __pycache__/
-*.pycout/
+*.pyc
+out/
